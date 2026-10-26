@@ -16,7 +16,7 @@ class AdminMiddleware
 
         $user = auth()->user();
 
-        if (!in_array($user->jabatan, ['Admin', 'Supervisor', 'Chief'])) {
+        if (!in_array($user->jabatan, ['Admin', 'Supervisor', 'Chief'], true)) {
             abort(403, 'Akses ditolak.');
         }
 

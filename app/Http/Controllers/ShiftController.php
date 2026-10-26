@@ -2,17 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Location;
 use App\Models\Branch;
-use App\Models\Shifts;
+use App\Models\Shift;
+use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class ShiftController extends Controller
 {
     public function index()
     {
         $user = auth()->user();
-        $shifts = \App\Models\Shift::with('branch')
-            ->when($user->jabatan !== 'Admin' && $user->jabatan !== 'Chief', fn($q) => $q->where('branch_id', $user->branch_id))
+
+        $shifts = Shift::with('branch')
+            ->when($user->jabatan !== 'Admin' && $user->jabatan !== 'Chief', fn ($query) => $query->where('branch_id', $user->branch_id))
             ->get();
 
         return view('shifts.index', compact('shifts'));
@@ -24,7 +26,7 @@ class ShiftController extends Controller
         return view('shifts.create', compact('branches'));
     }
 
-    public function store(\Illuminate\Http\Request $request)
+    public function store(Request $request)
     {
         $request->validate([
             'branch_id' => 'required|exists:branches,id',
@@ -35,8 +37,8 @@ class ShiftController extends Controller
             'toleransi_menit' => 'required|integer',
         ]);
 
-        \App\Models\Shift::create([
-            'id' => (string) \Illuminate\Support\Str::uuid(),
+        Shift::create([
+            'id' => (string) Str::uuid(),
             'branch_id' => $request->branch_id,
             'nama_shift' => $request->nama_shift,
             'jenis_shift' => $request->jenis_shift,
@@ -49,19 +51,19 @@ class ShiftController extends Controller
         return redirect()->route('shifts.index')->with('success', 'Shift berhasil ditambah');
     }
 
-    public function edit(\App\Models\Shift $shift)
+    public function edit(Shift $shift)
     {
         $branches = Branch::all();
         return view('shifts.edit', compact('shift', 'branches'));
     }
 
-    public function update(\Illuminate\Http\Request $request, \App\Models\Shift $shift)
+    public function update(Request $request, Shift $shift)
     {
         $shift->update($request->all());
         return redirect()->route('shifts.index')->with('success', 'Shift berhasil diupdate');
     }
 
-    public function destroy(\App\Models\Shift $shift)
+    public function destroy(Shift $shift)
     {
         $shift->delete();
         return redirect()->route('shifts.index')->with('success', 'Shift berhasil dihapus');
