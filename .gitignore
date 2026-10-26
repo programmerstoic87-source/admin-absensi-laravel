@@ -1,31 +1,21 @@
-/vendor/
-node_modules/
-npm-debug.log
-yarn-error.log
+<?php
 
-# Laravel 4 specific
-bootstrap/compiled.php
-app/storage/
+$items = [
+    '/vendor',
+    '/node_modules',
+    '/public/hot',
+    '/storage/*.key',
+    '/vendor/**',
+    '/node_modules/**',
+    '/.phpunit.result.cache',
+    '/phpunit.xml',
+    '/.env',
+    '/.env.*',
+    '/npm-debug.log',
+    '/yarn-error.log',
+    '/.DS_Store',
+];
 
-# Laravel 5 & Lumen specific
-public/storage
-public/hot
-
-# Laravel 5 & Lumen specific with changed public path
-public_html/storage
-public_html/hot
-
-storage/*.key
-.env
-Homestead.yaml
-Homestead.json
-/.vagrant
-.phpunit.result.cache
-/.phpunit.cache
-
-/public/build
-/storage/pail
-.env.backup
-.env.production
-.phpactor.json
-auth.json
+foreach ($items as $item) {
+    echo $item . PHP_EOL;
+}
